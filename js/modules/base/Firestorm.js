@@ -1,20 +1,22 @@
 // Includes
-document.write('<script src="js/modules/Utility.js"></script>');
-document.write('<script src="js/modules/AssetManager.js"></script>');
-document.write('<script src="js/modules/Clock.js"></script>');
-document.write('<script src="js/modules/Performance.js"></script>');
-document.write('<script src="js/modules/Input.js"></script>');
-document.write('<script src="js/modules/Vec2.js"></script>');
-document.write('<script src="js/modules/Physics.js"></script>');
-document.write('<script src="js/modules/Button.js"></script>');
-document.write('<script src="js/modules/TabGroup.js"></script>');
-document.write('<script src="js/modules/TextBox.js"></script>');
-document.write('<script src="js/modules/Entity.js"></script>');
-document.write('<script src="js/modules/Animation.js"></script>');
-document.write('<script src="js/modules/SpriteSheet.js"></script>');
-document.write('<script src="js/modules/Parallax.js"></script>');
-document.write('<script src="js/modules/Background.js"></script>');
-document.write('<script src="js/modules/Camera.js"></script>');
+document.write('<script src="js/modules/base/engine/Utility.js"></script>');
+document.write('<script src="js/modules/base/engine/AssetManager.js"></script>');
+document.write('<script src="js/modules/base/engine/Clock.js"></script>');
+document.write('<script src="js/modules/base/engine/Performance.js"></script>');
+document.write('<script src="js/modules/base/engine/Input.js"></script>');
+document.write('<script src="js/modules/base/engine/Physics.js"></script>');
+document.write('<script src="js/modules/base/engine/BaseScene.js"></script>');
+
+document.write('<script src="js/modules/base/instance/Vec2.js"></script>');
+document.write('<script src="js/modules/base/instance/Button.js"></script>');
+document.write('<script src="js/modules/base/instance/TabGroup.js"></script>');
+document.write('<script src="js/modules/base/instance/TextBox.js"></script>');
+document.write('<script src="js/modules/base/instance/Entity.js"></script>');
+document.write('<script src="js/modules/base/instance/Animation.js"></script>');
+document.write('<script src="js/modules/base/instance/SpriteSheet.js"></script>');
+document.write('<script src="js/modules/base/instance/Parallax.js"></script>');
+document.write('<script src="js/modules/base/instance/Background.js"></script>');
+document.write('<script src="js/modules/base/instance/Camera.js"></script>');
 
 var Firestorm = (function(Firestorm)
 {
@@ -42,16 +44,13 @@ var Firestorm = (function(Firestorm)
 
 	Firestorm.run = function(scene)
 	{
-		displayProgress(0);
-
 		function displayProgress(percentage_complete)
 		{
 			if(Firestorm.context)
 			{
+				Firestorm.clear('black');
 				Firestorm.context.save();
 					Firestorm.context.beginPath();
-						Firestorm.context.fillStyle = 'black';
-						Firestorm.context.fillRect(0, 0, Firestorm.width, Firestorm.height);
 						Firestorm.context.textAlign = 'center';
 						Firestorm.context.fillStyle = 'white';
 						Firestorm.context.font = '15px terminal';
@@ -75,8 +74,12 @@ var Firestorm = (function(Firestorm)
 
 		function allAssetsLoaded()
 		{
+			setInterval(Firestorm.update, 0);
+			Firestorm.draw();
 			Firestorm.switchScene(scene, {});
 		}
+
+		displayProgress(0);
 
 		if(Firestorm.assetManager.length() > 0)
 		{
@@ -86,15 +89,10 @@ var Firestorm = (function(Firestorm)
 		{
 			allAssetsLoaded();
 		}
-
-		setInterval(Firestorm.update, 0);
-		Firestorm.draw();
 	}
 
 	Firestorm.initialize = function(options)
 	{
-		$('body').css('overflow', 'hidden');
-
 		Firestorm.canvas = document.getElementsByTagName('canvas')[0];
 		if(!Firestorm.canvas)
 		{

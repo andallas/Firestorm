@@ -14,9 +14,6 @@ function Clock()
 	var _isPaused = false;
 	var _isStopped = false;
 
-	$(window).focus(function(){ self.unpause(); });
-	$(window).blur(function(){ self.pause(); });
-
 	this.update = function()
 	{
 		var curTime = Date.now();
@@ -118,4 +115,7 @@ function Clock()
 	{
 		 return _isStopped;
 	}
+
+	window.onfocus = self.unpause;
+	window.onblur = self.pause;
 }
