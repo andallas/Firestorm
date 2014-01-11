@@ -1,22 +1,27 @@
-// Includes
-document.write('<script src="js/modules/base/engine/Utility.js"></script>');
-document.write('<script src="js/modules/base/engine/AssetManager.js"></script>');
-document.write('<script src="js/modules/base/engine/Clock.js"></script>');
-document.write('<script src="js/modules/base/engine/Performance.js"></script>');
-document.write('<script src="js/modules/base/engine/Input.js"></script>');
-document.write('<script src="js/modules/base/engine/Physics.js"></script>');
-document.write('<script src="js/modules/base/engine/BaseScene.js"></script>');
+// Engine objects
+document.write('<script src="firestorm/base/engine/Utility.js"></script>');
+document.write('<script src="firestorm/base/engine/AssetManager.js"></script>');
+document.write('<script src="firestorm/base/engine/Clock.js"></script>');
+document.write('<script src="firestorm/base/engine/Performance.js"></script>');
+document.write('<script src="firestorm/base/engine/Input.js"></script>');
+document.write('<script src="firestorm/base/engine/Physics.js"></script>');
+document.write('<script src="firestorm/base/engine/BaseScene.js"></script>');
 
-document.write('<script src="js/modules/base/instance/Vec2.js"></script>');
-document.write('<script src="js/modules/base/instance/Button.js"></script>');
-document.write('<script src="js/modules/base/instance/TabGroup.js"></script>');
-document.write('<script src="js/modules/base/instance/TextBox.js"></script>');
-document.write('<script src="js/modules/base/instance/Entity.js"></script>');
-document.write('<script src="js/modules/base/instance/Animation.js"></script>');
-document.write('<script src="js/modules/base/instance/SpriteSheet.js"></script>');
-document.write('<script src="js/modules/base/instance/Parallax.js"></script>');
-document.write('<script src="js/modules/base/instance/Background.js"></script>');
-document.write('<script src="js/modules/base/instance/Camera.js"></script>');
+// Instance objects
+document.write('<script src="firestorm/base/instance/Vec2.js"></script>');
+document.write('<script src="firestorm/base/instance/Button.js"></script>');
+document.write('<script src="firestorm/base/instance/TabGroup.js"></script>');
+document.write('<script src="firestorm/base/instance/TextBox.js"></script>');
+document.write('<script src="firestorm/base/instance/Entity.js"></script>');
+document.write('<script src="firestorm/base/instance/Animation.js"></script>');
+document.write('<script src="firestorm/base/instance/SpriteSheet.js"></script>');
+document.write('<script src="firestorm/base/instance/Parallax.js"></script>');
+document.write('<script src="firestorm/base/instance/Background.js"></script>');
+document.write('<script src="firestorm/base/instance/Camera.js"></script>');
+
+// Splash scenes
+document.write('<script src="firestorm/base/scenes/BMSSplash.js"></script>');
+document.write('<script src="firestorm/base/scenes/FirestormSplash.js"></script>');
 
 var Firestorm = (function(Firestorm)
 {
@@ -76,7 +81,7 @@ var Firestorm = (function(Firestorm)
 		{
 			setInterval(Firestorm.update, 0);
 			Firestorm.draw();
-			Firestorm.switchScene(scene, {});
+			Firestorm.switchScene(BMSSplash, {scene: scene});
 		}
 
 		displayProgress(0);
@@ -122,6 +127,8 @@ var Firestorm = (function(Firestorm)
 		}
 
 		Firestorm.initializeObjects();
+		Firestorm.assetManager.add("firestorm/base/images/SplashScreen.png");
+		Firestorm.assetManager.add("firestorm/base/images/Firestorm.png");
 		Firestorm.input.preventDefaultKeys(['`']);
 	}
 

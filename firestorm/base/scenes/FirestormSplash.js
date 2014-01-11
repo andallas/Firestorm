@@ -7,7 +7,7 @@ function FirestormSplash()
 	var wait = 0;
 
 	// Background
-	var background = new Entity({image: "img/backgrounds/Splash/Firestorm.png", x: 0, y: 0, depth: 0, alpha: 1});
+	var background = new Entity({image: "firestorm/base/images/Firestorm.png", x: 0, y: 0, depth: 0, alpha: 1});
 	
 	background.position.x = (Firestorm.width * 0.5) - background.width * 0.5;
 	background.position.y = (Firestorm.height * 0.5) - background.height * 0.5;
@@ -16,7 +16,7 @@ function FirestormSplash()
 	{
 		if(Firestorm.input.pressed("esc space"))
 		{
-			Firestorm.switchScene(MainMenu, {});
+			Firestorm.switchScene(this.scene, {scene: this.scene});
 		}
 
 		switch(fadeIn)
@@ -56,7 +56,7 @@ function FirestormSplash()
 				}
 			break;
 			case 4:
-				Firestorm.switchScene(MainMenu, {});
+				Firestorm.switchScene(this.scene, {});
 			break;
 			default:
 			break;
@@ -78,6 +78,11 @@ function FirestormSplash()
 			Firestorm.context.fillStyle = 'black';
 			Firestorm.context.fill();
 		Firestorm.context.restore();
+	}
+
+	this.setOptions = function(options)
+	{
+		this.scene = options.scene;
 	}
 }
 FirestormSplash.inherits(BaseScene);

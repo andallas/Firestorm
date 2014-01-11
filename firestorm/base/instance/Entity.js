@@ -136,6 +136,7 @@ Entity.prototype.draw = function()
 		{
 			this.context.scale(-1, 1);
 		}
+
 		if(this.angle != 0)
 		{
 			if(this.rotatePoint)
@@ -155,7 +156,7 @@ Entity.prototype.draw = function()
 		this.context.drawImage(this.image, 0, 0, this.width, this.height);
 
 		// Debug
-		if(Firestorm.DEBUG_ENTITY)
+		if(Firestorm.DEBUG)
 		{
 			Firestorm.context.globalCompositeOperation = 'lighter';
 			this.context.beginPath();

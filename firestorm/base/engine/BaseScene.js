@@ -20,8 +20,3 @@ BaseScene.method('Draw', function(value)
 {
 	return this;
 });
-
-BaseScene.method('Physics', function(value)
-{
-	return this;
-});

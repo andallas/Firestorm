@@ -8,3 +8,4 @@ Addons
 	Objects/classes that a developer can 'plugin' to Firestorm
 
 // Issues
+De-couple Firestorm from game
