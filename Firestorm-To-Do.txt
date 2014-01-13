@@ -1,4 +1,37 @@
 // Ideas
+Coherent Noise
+	Simplex Nosie
+	Perlin Nosie
+	Voronoi Diagrams
+	Sequence Generator for Coherent Noise
+Object Pools
+	Use with Particle System
+Tiled Map Editor support
+Saving/Loading
+Networking/Multiplayer
+Achievements
+AI
+	Use Voronoi Diagrams or other Coherent Noise
+	Finite State Machine
+	Flocking
+	Pathfinding
+Better UI
+	Color Picker
+	Input elements
+	More Output elements
+	Tooltips
+	Indicators (arrows pointing to things offscreen, etc...)
+Particle System
+Space Partitioning
+	Quadtrees
+Audio
+	Responsive Music
+	Procedural Audio with Web Audio API
+Physics
+	Model and Solve Physical Constraints
+	Force/Impulse
+	Collision Detection
+	Collision Response
 Post-Process effects
 	Motion Blur
 	Depth of Field
