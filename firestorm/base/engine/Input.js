@@ -1,6 +1,7 @@
 function Input()
 {
 	var _pressedKeys = {};
+	var _heldKeys = {};
 	var _previouslyPressedKeys = {};
 	var _keycodeToString = [];
 	var _onKeyUpCallbacks = [];
@@ -12,6 +13,8 @@ function Input()
 	var _prevMouse_wheel = 0;
 	var _mouseX = 0;
 	var _mouseY = 0;
+	var _holdDelay = 125;
+	var self = this;
 
 	this.getPressedKeys = function()
 	{
@@ -110,14 +113,15 @@ function Input()
 		firestormWindow.addEventListener("touchstart", handleTouchStart, false);
 		firestormWindow.addEventListener("touchend", handleTouchEnd, false);
 
-		window.addEventListener("blur", resetPressedKeys, false);
+		window.addEventListener("blur", resetKeys, false);
 
 		document.oncontextmenu = function() { return false };
 	}
 
-	function resetPressedKeys(e)
+	function resetKeys(e)
 	{
 		_pressedKeys = {};
+		_heldKeys = {};
 	}
 
 	function handleKeyUp(e)
@@ -133,6 +137,7 @@ function Input()
 		humanNames.forEach( function(humanName)
 		{
 			_pressedKeys[humanName] = false;
+			_heldKeys[humanName] = false;
 			if(_onKeyUpCallbacks[humanName])
 			{
 				_onKeyUpCallbacks[humanName](humanName);
@@ -155,6 +160,7 @@ function Input()
 		humanNames.forEach( function(humanName)
 		{
 			_pressedKeys[humanName] = true;
+			setTimeout(setHeld, _holdDelay, self, humanName);
 			if(_onKeyDownCallbacks[humanName])
 			{
 				_onKeyDownCallbacks[humanName](humanName);
@@ -170,25 +176,6 @@ function Input()
 		_mouseY = (e.pageY || e.clientY) - Firestorm.canvas.offsetTop;
 	}
 
-	function handleMouseDown(e)
-	{
-		event = (e) ? e : window.event;
-		var humanName = _mouseButtonCodeToString[event.button];
-
-		if (navigator.appName == "Microsoft Internet Explorer")
-		{
-			humanName = _IEMouseButtonCodeToString[event.button];
-		}
-
-		_pressedKeys[humanName] = true;
-
-		if(_onKeyDownCallbacks[humanName])
-		{
-			_onKeyDownCallbacks[humanName](humanName);
-			e.preventDefault();
-		}
-	}
-
 	function handleMouseUp(e)
 	{
 		event = (e) ? e : window.event;
@@ -200,11 +187,41 @@ function Input()
 		}
 
 		_pressedKeys[humanName] = false;
+		_heldKeys[humanName] = false;
 
 		if(_onKeyUpCallbacks[humanName])
 		{
 			_onKeyUpCallbacks[humanName](humanName);
 			e.preventDefault();
+		}
+	}
+
+	function handleMouseDown(e)
+	{
+		event = (e) ? e : window.event;
+		var humanName = _mouseButtonCodeToString[event.button];
+
+		if (navigator.appName == "Microsoft Internet Explorer")
+		{
+			humanName = _IEMouseButtonCodeToString[event.button];
+		}
+
+		_pressedKeys[humanName] = true;
+		setTimeout(setHeld, _holdDelay, self, humanName);
+
+		if(_onKeyDownCallbacks[humanName])
+		{
+			_onKeyDownCallbacks[humanName](humanName);
+			e.preventDefault();
+		}
+	}
+
+	function setHeld(self, key)
+	{
+		if(self.pressed(key))
+		{
+			_heldKeys[key] = true;
+			_pressedKeys[key] = false;
 		}
 	}
 
@@ -246,21 +263,23 @@ function Input()
 		e.preventDefault();
 	}
 
-	function handleTouchStart(e)
-	{
-		event = (e) ? e : window.event;
-		_pressedKeys["left_mouse_button"] = true;
-		this._mouseX = e.touches[0].pageX - Firestorm.canvas.offsetLeft;
-		this._mouseY = e.touches[0].pageY - Firestorm.canvas.offsetTop;
-		//e.preventDefault();
-	}
-
 	function handleTouchEnd(e)
 	{
 		event = (e) ? e : window.event;
 		_pressedKeys["left_mouse_button"] = false;
+		_heldKeys["left_mouse_button"] = false;
 		this._mouseX = undefined;
 		this._mouseY = undefined;
+		//e.preventDefault();
+	}
+
+	function handleTouchStart(e)
+	{
+		event = (e) ? e : window.event;
+		_pressedKeys["left_mouse_button"] = true;
+		setTimeout(setHeld, _holdDelay, self, "left_mouse_button");
+		this._mouseX = e.touches[0].pageX - Firestorm.canvas.offsetLeft;
+		this._mouseY = e.touches[0].pageY - Firestorm.canvas.offsetTop;
 		//e.preventDefault();
 	}
 
@@ -308,6 +327,29 @@ function Input()
 		{
 			return keys.every(function(key)
 			{
+				return _heldKeys[key]
+			});
+		}
+		else
+		{
+			return keys.some(function(key)
+			{
+				return _heldKeys[key]
+			});
+		}
+	}
+
+	this.pressed = function(keys, logicalAnd)
+	{
+		if(Firestorm.utility.isString(keys))
+		{
+			keys = keys.split(" ");
+		}
+
+		if(logicalAnd)
+		{
+			return keys.every(function(key)
+			{
 				return _pressedKeys[key]
 			});
 		}
@@ -317,24 +359,6 @@ function Input()
 			{
 				return _pressedKeys[key]
 			});
-		}
-	}
-
-	this.pressed = function(keys, logicalAnd)
-	{
-		if(this.held(keys, logicalAnd))
-		{
-			// Change to return _previouslyPressedKeys[keys] = true; Does this work??
-			if(!_previouslyPressedKeys[keys])
-			{
-				_previouslyPressedKeys[keys] = true;
-				return true;
-			}
-		}
-		else
-		{
-			_previouslyPressedKeys[keys] = false;
-			return false;
 		}
 	}
 
