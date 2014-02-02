@@ -1,3 +1,17 @@
+/*
+	@param context 				Context: this is an optional context to use for rendering. Defaults to Firestorm.context
+	@param x 					int: the world x coordinate for this object. Defaults to 0
+	@param y 					int: the world y coordinate for this object. Defaults to 0
+	@param image 				image: the image to use for this object. Either this or animation is required. No defaults
+	@param anchor 				string: a string that represents the anchor point on this object. Defaults to center
+	@param depth 				int: the depth level of this object. This affects the draw order as well as the scrolling speed for camera effects. Defaults to 0
+	@param alpha 				float: the alpha level that represents the opacity of this object. The range should be from 0.0 to 1.0 where 1.0 is full opacity. Defaults to 1.0
+	@param blendMode 			string: the blending mode for transparent layers. No defaults
+	@param animation 			animaiton: the animation frames if this object should be animated. Either this or image is required. No defaults
+	@param scrollX 				int: this represent the horizontal velocity that this object should scroll at. Defaults to 0
+	@param scrollY 				int: this represent the vertical velocity that this object should scroll at. Defaults to 0
+	@param loop 				bool: a boolean value that determines if this object should loop once it scrolls to the end. Defaults to false
+*/
 Background = function Background(options)
 {
 	if(!(this instanceof arguments.callee))
@@ -24,11 +38,11 @@ Background.prototype.set = function(options)
 	this.anchor(options.anchor || "center");
 	this.position = new Vec2({x: options.x || 0, y: options.y || 0});
 	this.depth = options.depth || 0;
-	this.alpha = options.alpha || 1;
+	this.alpha = options.alpha || 1.0;
 	this.blendMode = options.blendMode;
 	this.animation = options.animation;
 	this.scrollVelocity = new Vec2({x: options.scrollX || 0, y: options.scrollY || 0});
-	this.isLoop = options.loop;
+	this.isLoop = options.loop || false;
 
 	return this;
 }

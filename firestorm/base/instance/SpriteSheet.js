@@ -1,3 +1,9 @@
+/*
+	@param image 				string: the path to an image. No defaults, parameter is required
+	@param orientation 			string: a string value that determines the orientation of the sprites. Defaults to down
+	@param frame_size 			int[]: an array of integers representing the width and height of a single animation frame. There should only ever be two elements in this array. Defaults to 32x32
+	@param offset 				int: an integer that represents the offset in pixels for the spritesheet. Defaults to 0
+*/
 SpriteSheet = function SpriteSheet(options)
 {
 	if(!(this instanceof arguments.callee))

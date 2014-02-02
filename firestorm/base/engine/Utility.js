@@ -35,6 +35,11 @@ function Utility()
 		return this.isImage(possibleDrawable) || this.isCanvas(possibleDrawable);
 	}
 
+	this.isAudio = function(possibleAudio)
+	{
+		return Object.prototype.toString.call(possibleAudio) === '[object HTMLAudioElement]';
+	}
+
 	this.imageToCanvas = function(image)
 	{
 		var canvas = document.createElement('canvas');
@@ -57,7 +62,7 @@ function Utility()
 		{
 			return color;
 		}
-		if(color.alpha)
+		if(color.alpha != undefined)
 		{
 			return "rgba(" + color.red + ", " + color.green + ", " + color.blue + ", " + color.alpha + ")";
 		}

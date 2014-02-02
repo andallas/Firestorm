@@ -8,6 +8,8 @@
 	@param font 				font: the font for the text string
 	@param fontColor 			color: the color of the text string, accepts a color
 	@param alignment			string: the alignment to be used for the text
+	@param baseline				string: the baseline to be used for the text
+	@param textWrap				bool: whether or not the text should wrap to the next line
 */
 TextBox = function TextBox(options)
 {
@@ -17,49 +19,31 @@ TextBox = function TextBox(options)
 	}
 
 	this.context = Firestorm.context;
-
-	// Size & Position
-	this.width = options.width || 100;
-	this.height = options.height || options.fontSize + 10 || 30;
-	this.x = options.x;
-	this.y = options.y;
-	
-	// Colors
-	this.fontColor = options.fontColor || {red: 255, green: 255, blue: 255, alpha: 1.0};
-	this.fontColor = Firestorm.utility.getColor(this.fontColor);
-	
-	// Text
-	this.text = options.text || undefined;
-	this.fontSize = options.fontSize || 20;
-	this.font = options.font || "audiowide";
-
-	// Formatting options
-	this.alignment = options.alignment || 'center';
-	this.textWrap = options.textWrap;
-
+	this.options = options;
 	this.setOptions(options);
 }
 
 TextBox.prototype.setOptions = function(options)
 {
 	// Size & Postion
-	this.width = options.width || this.width;
-	this.height = options.height || this.height;
+	this.width = options.width || this.width || 100;
+	this.height = options.height || this.height || options.fontSize + 10 || 30;
 	this.x = options.x || this.x;
 	this.y = options.y || this.y;
 	
 	// Colors
-	this.fontColor = options.fontColor || this.fontColor;
+	this.fontColor = options.fontColor || this.fontColor || {red: 255, green: 255, blue: 255, alpha: 1.0};
 	this.fontColor = Firestorm.utility.getColor(this.fontColor);
 	
 	// Text
 	this.text = options.text || this.text;
-	this.fontSize = options.fontSize || this.fontSize;
-	this.font = options.font || this.font;
+	this.fontSize = options.fontSize || this.fontSize || 20;
+	this.font = options.font || this.font || 'helvetica';
 
 	// Formatting options
-	this.alignment = options.alignment || 'center';
-	this.textWrap = options.textWrap;
+	this.alignment = options.alignment || this.alignment || 'center';
+	this.textWrap = options.textWrap || this.textWrap || false;
+	this.baseline = options.baseline || this.baseline || 'middle';
 }
 
 TextBox.prototype.draw = function()
@@ -71,7 +55,7 @@ TextBox.prototype.draw = function()
 		if(this.text !== undefined)
 		{
 			this.context.textAlign  = this.alignment;
-			this.context.textBaseline = 'middle';
+			this.context.textBaseline = this.baseline;
 			this.context.fillStyle  = this.fontColor;
 			if(this.fontSize > this.height - 6)
 			{
@@ -92,15 +76,18 @@ TextBox.prototype.draw = function()
 				this.context.fillText(this.text, this.x + this.width / 2, this.y + this.height / 2);
 			}
 
-			this.context.beginPath();
-				this.context.moveTo(this.x, this.y);
-				this.context.lineTo(this.x + this.width, this.y);
-				this.context.lineTo(this.x + this.width, this.y + this.height);
-				this.context.lineTo(this.x, this.y + this.height);
-				this.context.lineTo(this.x, this.y);
-				this.context.strokeStyle = 'red';
-				this.context.stroke();
-			this.context.closePath();
+			if(Firestorm.DEBUG)
+			{
+				this.context.beginPath();
+					this.context.moveTo(this.x, this.y);
+					this.context.lineTo(this.x + this.width, this.y);
+					this.context.lineTo(this.x + this.width, this.y + this.height);
+					this.context.lineTo(this.x, this.y + this.height);
+					this.context.lineTo(this.x, this.y);
+					this.context.strokeStyle = 'red';
+					this.context.stroke();
+				this.context.closePath();
+			}
 		}
 	this.context.restore();
 	return this;

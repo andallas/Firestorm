@@ -144,7 +144,27 @@ function AssetManager()
 				asset.audio.asset = asset;
 				this.data[asset.src] = asset.audio;
 				asset.audio.addEventListener('canplay', this.assetLoaded, false);
-				asset.audio.addEventListener('error', this.assetError, false);
+				asset.audio.addEventListener('error', function(e)
+				{
+					switch (e.target.error.code)
+					{
+						case e.target.error.MEDIA_ERR_ABORTED:
+							console.log("The fetching process for the media resource was aborted by the user agent at the user's request.");
+						break;
+						case e.target.error.MEDIA_ERR_NETWORK:
+							console.log("A network error of some description caused the user agent to stop fetching the media resource, after the resource was established to be usable.");
+						break;
+						case e.target.error.MEDIA_ERR_DECODE:
+							console.log("An error of some description occurred while decoding the media resource, after the resource was established to be usable.");
+						break;
+						case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+							console.log("The media resource indicated by the src attribute was not suitable.");
+						break;
+						default:
+							console.log("An unknown error occurred.");
+						break;
+					}
+				}, true);
 				asset.audio.load();
 			break;
 			default:
@@ -174,7 +194,7 @@ function AssetManager()
 			}
 			that.data[asset.src] = JSON.parse(this.responseText);
 		}
-		else if(fileType = 'image')
+		else if(fileType == 'image')
 		{
 			var newImage = that.isImageToCanvas ? Firestorm.utility.imageToCanvas(asset.image) : asset.image;
 			if(that.isFuchiaToTransparent && that.getPostFix(asset.src) == 'bmp')

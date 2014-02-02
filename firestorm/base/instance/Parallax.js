@@ -1,3 +1,6 @@
+/*
+	@param layers 				background[]: an array of backgrounds. Defaults to an empty array
+*/
 Parallax = function Parallax(options)
 {
 	if(!(this instanceof arguments.callee))
@@ -11,7 +14,7 @@ Parallax = function Parallax(options)
 
 Parallax.prototype.set = function(options)
 {
-	this.layers = [];
+	this.layers = options.layers || [];
 
 	return this;
 }

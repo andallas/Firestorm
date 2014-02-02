@@ -79,7 +79,7 @@ Button = function Button(defaultOptions, focusOptions, hoverOptions)
 	// Text
 	this.text = defaultOptions.text || undefined;
 	this.fontSize = defaultOptions.fontSize || 32;
-	this.font = defaultOptions.font || "audiowide";
+	this.font = defaultOptions.font || "helvetica";
 	this.fontColor = defaultOptions.fontColor || {red: 255, green: 255, blue: 255, alpha: 1.0};
 	this.fontColor = Firestorm.utility.getColor(this.fontColor);
 
@@ -109,6 +109,13 @@ Button.prototype.update = function()
 			if(!this.active)
 			{
 				this.state = 'hover';
+			}
+		}
+		else
+		{
+			if(!this.active)
+			{
+				this.state = 'default';
 			}
 		}
 	}
@@ -287,6 +294,7 @@ Button.prototype.draw = function()
 			var image = this.context.createPattern(this.bgImage, this.repeat);
 			this.context.fillStyle = image;
 		}
+
 		this.context.fill();
 		// Reset Shadow
 		this.context.shadowOffsetX = 0;

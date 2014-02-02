@@ -1,3 +1,6 @@
+/*
+	This object is under development
+*/
 TabGroup = function TabGroup(options)
 {
 	if(!(this instanceof arguments.callee))
