@@ -198,6 +198,7 @@ var Firestorm = (function(Firestorm)
 
 			// Set the options of the scene
 			scene.setOptions(options);
+			scene.Init();
 		}
 
 		Firestorm.scene = scene;
