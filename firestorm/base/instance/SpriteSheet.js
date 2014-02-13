@@ -46,9 +46,9 @@ SpriteSheet.prototype.set = function(options)
 
 	if(this.orientation == "down")
 	{
-		for(var y=this.offset; y < this.image.height; y += this.frame_size[1])
+		for(var y=this.offset; y <= this.image.height; y += this.frame_size[1])
 		{
-			for(var x=0; x < this.image.width; x += this.frame_size[0])
+			for(var x=0; x <= this.image.width; x += this.frame_size[0])
 			{
 				this.frames.push( cutImage(this.image, x, y, this.frame_size[0], this.frame_size[1]) );
 			}
@@ -56,9 +56,9 @@ SpriteSheet.prototype.set = function(options)
 	}
 	else
 	{
-		for(var x=this.offset; x < this.image.width; x += this.frame_size[0])
+		for(var x=this.offset; x <= this.image.width; x += this.frame_size[0])
 		{
-			for(var y=0; y < this.image.height; y += this.frame_size[1])
+			for(var y=0; y <= this.image.height; y += this.frame_size[1])
 			{
 				this.frames.push( cutImage(this.image, x, y, this.frame_size[0], this.frame_size[1]) );
 			}

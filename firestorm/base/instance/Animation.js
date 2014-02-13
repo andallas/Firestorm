@@ -63,7 +63,7 @@ Animation.prototype.update = function()
 
 	if(this.sum_tick > this.frame_duration)
 	{
-		this.index += this.frame_duration;
+		this.index += this.frame_direction;
 		this.sum_tick = 0;
 	}
 	if( (this.index >= this.frames.length) || (this.index < 0) )
