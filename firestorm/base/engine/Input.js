@@ -1,7 +1,6 @@
 function Input()
 {
 	var _pressedKeys = {};
-	var _heldKeys = {};
 	var _previouslyPressedKeys = {};
 	var _keycodeToString = [];
 	var _onKeyUpCallbacks = [];
@@ -13,8 +12,6 @@ function Input()
 	var _prevMouse_wheel = 0;
 	var _mouseX = 0;
 	var _mouseY = 0;
-	var _holdDelay = 125;
-	var self = this;
 
 	this.getPressedKeys = function()
 	{
@@ -113,15 +110,14 @@ function Input()
 		firestormWindow.addEventListener("touchstart", handleTouchStart, false);
 		firestormWindow.addEventListener("touchend", handleTouchEnd, false);
 
-		window.addEventListener("blur", resetKeys, false);
+		window.addEventListener("blur", resetPressedKeys, false);
 
 		document.oncontextmenu = function() { return false };
 	}
 
-	function resetKeys(e)
+	function resetPressedKeys(e)
 	{
 		_pressedKeys = {};
-		_heldKeys = {};
 	}
 
 	function handleKeyUp(e)
@@ -137,7 +133,6 @@ function Input()
 		humanNames.forEach( function(humanName)
 		{
 			_pressedKeys[humanName] = false;
-			_heldKeys[humanName] = false;
 			if(_onKeyUpCallbacks[humanName])
 			{
 				_onKeyUpCallbacks[humanName](humanName);
@@ -160,7 +155,6 @@ function Input()
 		humanNames.forEach( function(humanName)
 		{
 			_pressedKeys[humanName] = true;
-			setTimeout(setHeld, _holdDelay, self, humanName);
 			if(_onKeyDownCallbacks[humanName])
 			{
 				_onKeyDownCallbacks[humanName](humanName);
@@ -187,7 +181,6 @@ function Input()
 		}
 
 		_pressedKeys[humanName] = false;
-		_heldKeys[humanName] = false;
 
 		if(_onKeyUpCallbacks[humanName])
 		{
@@ -207,21 +200,11 @@ function Input()
 		}
 
 		_pressedKeys[humanName] = true;
-		setTimeout(setHeld, _holdDelay, self, humanName);
 
 		if(_onKeyDownCallbacks[humanName])
 		{
 			_onKeyDownCallbacks[humanName](humanName);
 			e.preventDefault();
-		}
-	}
-
-	function setHeld(self, key)
-	{
-		if(self.pressed(key))
-		{
-			_heldKeys[key] = true;
-			_pressedKeys[key] = false;
 		}
 	}
 
@@ -277,7 +260,6 @@ function Input()
 	{
 		event = (e) ? e : window.event;
 		_pressedKeys["left_mouse_button"] = true;
-		setTimeout(setHeld, _holdDelay, self, "left_mouse_button");
 		this._mouseX = e.touches[0].pageX - Firestorm.canvas.offsetLeft;
 		this._mouseY = e.touches[0].pageY - Firestorm.canvas.offsetTop;
 		//e.preventDefault();
@@ -327,38 +309,33 @@ function Input()
 		{
 			return keys.every(function(key)
 			{
-				return _heldKeys[key]
+				return _pressedKeys[key]
 			});
 		}
 		else
 		{
 			return keys.some(function(key)
 			{
-				return _heldKeys[key]
+				return _pressedKeys[key]
 			});
 		}
 	}
 
 	this.pressed = function(keys, logicalAnd)
 	{
-		if(Firestorm.utility.isString(keys))
+		if(this.held(keys, logicalAnd))
 		{
-			keys = keys.split(" ");
-		}
-
-		if(logicalAnd)
-		{
-			return keys.every(function(key)
+			if(!_previouslyPressedKeys[keys])
 			{
-				return _pressedKeys[key]
-			});
+				keys = keys.split(" ");
+				_previouslyPressedKeys[keys] = true;
+				return true;
+			}
 		}
 		else
 		{
-			return keys.some(function(key)
-			{
-				return _pressedKeys[key]
-			});
+			_previouslyPressedKeys[keys] = false;
+			return false;
 		}
 	}
 
